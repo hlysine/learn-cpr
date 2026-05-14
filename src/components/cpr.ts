@@ -10,12 +10,13 @@ export interface CPRFeedback {
 
 /**
  * Reconstructs the Chest Displacement (CD) signal s(t) from a
- * single-axis accelerometer signal a(t) using fft.js.
+ * single-axis accelerometer signal a(t) using fft.js, and estimates
+ * CPR performance metrics: rate (cpm) and depth (mm).
  *
  * @param acceleration - 1D array of raw acceleration signals (m/s^2)
  * @param samplingRate - Sampling frequency in Hz
  * @param numHarmonics - Number of harmonics (N) to use (default: 5)
- * @returns 1D array representing the displacement signal s(t) in mm
+ * @returns An object containing the reconstructed displacement signal, CPR rate, and depth
  */
 export function computeCPRFeedback(
   acceleration: number[],
@@ -117,6 +118,11 @@ export function computeCPRFeedback(
   return { rate, depth, displacement: s_t }
 }
 
+/**
+ * Empirically measure the actual sampling rate of the accelerometer by analyzing the timestamps of received data points.
+ * @param timestamps - An array of timestamps (in milliseconds) corresponding to when accelerometer readings were received.
+ * @returns The estimated sampling rate in Hz, calculated as the inverse of the median interval between consecutive timestamps.
+ */
 export function computeActualSamplingRate(timestamps: number[]): number {
   // timestamps in ms
   const intervals = timestamps.slice(1).map((t, i) => t - timestamps[i])
