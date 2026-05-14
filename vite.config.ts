@@ -12,13 +12,12 @@ const config = defineConfig({
   plugins: [
     devtools(),
     tailwindcss(),
-    tanstackStart({
-      spa: {
-        enabled: true,
-      },
-    }),
+    tanstackStart(),
     viteReact(),
-    basicSsl(),
+    {
+      ...basicSsl(),
+      apply: 'serve',
+    },
   ],
 })
 
